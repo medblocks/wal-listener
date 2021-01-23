@@ -24,10 +24,10 @@ type ListenerCfg struct {
 
 // NatsCfg path of the NATS config.
 type NatsCfg struct {
-	Address     string `valid:"required"`
-	ClusterID   string `valid:"required"`
-	ClientID    string `valid:"required"`
-	TopicPrefix string `valid:"required"`
+	Address   string `valid:"required"`
+	ClusterID string `valid:"required"`
+	ClientID  string `valid:"required"`
+	Topic     string
 }
 
 // LoggerCfg path of the logger config.

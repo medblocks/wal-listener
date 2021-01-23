@@ -236,7 +236,8 @@ func (l *Listener) Stream(ctx context.Context) {
 				if tx.CommitTime != nil {
 					natsEvents := tx.CreateEventsWithFilter(l.config.Database.Filter.Tables)
 					for _, event := range natsEvents {
-						subjectName := event.GetSubjectName(l.config.Nats.TopicPrefix)
+						subjectName := event.GetSubjectName(l.config.Nats.Topic)
+						fmt.Println(l.config.Nats.Topic, subjectName, event.Table)
 						if err = l.publisher.Publish(subjectName, event); err != nil {
 							l.errChannel <- fmt.Errorf("%v: %w", ErrPublishEvent, err)
 							continue

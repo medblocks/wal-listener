@@ -14,14 +14,11 @@ import (
 	"github.com/ihippik/wal-listener/listener"
 )
 
-// go build -ldflags "-X main.version=1.0.1" main.go
-var version = "0.1.0"
-
 func main() {
 	app := &cli.App{
 		Name:    "Wal-Listener",
 		Usage:   "listen postgres events",
-		Version: version,
+		Version: config.Version,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "config",
