@@ -240,7 +240,10 @@ func (l *Listener) Stream(ctx context.Context) {
 						log := logrus.
 							WithField("subject", subjectName).
 							WithField("action", event.Action).
-							WithField("subject", subjectName)
+							WithField("subject", subjectName).
+							WithField("schema", event.Schema).
+							WithField("table", event.Table).
+							WithField("action", event.Action)
 
 						err = l.publisher.Publish(subjectName, event)
 						if err != nil {
