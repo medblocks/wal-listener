@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/nats-io/stan.go"
+	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
@@ -38,7 +38,7 @@ func main() {
 
 			initLogger(cfg.Logger)
 
-			sc, err := stan.Connect(cfg.Nats.ClusterID, cfg.Nats.ClientID, stan.NatsURL(cfg.Nats.Address))
+			sc, err := nats.Connect(cfg.Nats.Address, nats.Name(cfg.Nats.ClientID))
 			if err != nil {
 				logrus.WithError(err).Fatalln(listener.ErrNatsConnection)
 			}

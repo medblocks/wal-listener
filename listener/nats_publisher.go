@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nats-io/stan.go"
+	nats "github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,12 +14,13 @@ import (
 
 // NatsPublisher represent event publisher.
 type NatsPublisher struct {
-	conn stan.Conn
+	conn *nats.Conn
 }
 
 // Close NATS connection.
 func (n NatsPublisher) Close() error {
-	return n.conn.Close()
+	n.conn.Close()
+	return nil
 }
 
 // Event event structure for publishing to the NATS server.
@@ -43,7 +44,7 @@ func (n NatsPublisher) Publish(subject string, event Event) error {
 }
 
 // NewNatsPublisher return new NatsPublisher instance.
-func NewNatsPublisher(conn stan.Conn) *NatsPublisher {
+func NewNatsPublisher(conn *nats.Conn) *NatsPublisher {
 	return &NatsPublisher{conn: conn}
 }
 
