@@ -3,12 +3,11 @@ package main
 import (
 	"fmt"
 
+	"github.com/ihippik/wal-listener/config"
 	"github.com/ihippik/wal-listener/listener"
 	"github.com/jackc/pgx"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-
-	"github.com/ihippik/wal-listener/config"
 )
 
 // logger log levels.

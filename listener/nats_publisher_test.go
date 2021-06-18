@@ -10,7 +10,7 @@ func TestEvent_GetSubjectName(t *testing.T) {
 		Data   map[string]interface{}
 	}
 	type args struct {
-		prefix string
+		topic string
 	}
 	tests := []struct {
 		name   string
@@ -19,7 +19,18 @@ func TestEvent_GetSubjectName(t *testing.T) {
 		want   string
 	}{
 		{
-			name: "success",
+			name: "empty topic return default format with scheam and table",
+			fields: fields{
+				Schema: "public",
+				Table:  "users",
+				Action: "insert",
+				Data:   nil,
+			},
+			args: args{},
+			want: "public_users",
+		},
+		{
+			name: "topic without formatting parameters is returned as is",
 			fields: fields{
 				Schema: "public",
 				Table:  "users",
@@ -27,9 +38,48 @@ func TestEvent_GetSubjectName(t *testing.T) {
 				Data:   nil,
 			},
 			args: args{
-				prefix: "prefix_",
+				topic: "constant_topic",
 			},
-			want: "prefix_public_users",
+			want: "constant_topic",
+		},
+		{
+			name: "topic with single formatting parameters includes the table name",
+			fields: fields{
+				Schema: "public",
+				Table:  "users",
+				Action: "insert",
+				Data:   nil,
+			},
+			args: args{
+				topic: "app_%s",
+			},
+			want: "app_users",
+		},
+		{
+			name: "topic with two formatting parameters includes the schema and table name",
+			fields: fields{
+				Schema: "public",
+				Table:  "users",
+				Action: "insert",
+				Data:   nil,
+			},
+			args: args{
+				topic: "app_%s_%s",
+			},
+			want: "app_public_users",
+		},
+		{
+			name: "topic with more than two formatting parameters uses the default",
+			fields: fields{
+				Schema: "public",
+				Table:  "users",
+				Action: "insert",
+				Data:   nil,
+			},
+			args: args{
+				topic: "app_%s_%s_%s",
+			},
+			want: "public_users",
 		},
 	}
 	for _, tt := range tests {
@@ -40,7 +90,7 @@ func TestEvent_GetSubjectName(t *testing.T) {
 				Action: tt.fields.Action,
 				Data:   tt.fields.Data,
 			}
-			if got := e.GetSubjectName(tt.args.prefix); got != tt.want {
+			if got := e.GetSubjectName(tt.args.topic); got != tt.want {
 				t.Errorf("GetSubjectName() = %v, want %v", got, tt.want)
 			}
 		})

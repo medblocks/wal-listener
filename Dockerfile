@@ -1,8 +1,5 @@
-FROM alpine:3.10
-MAINTAINER Konstantin Makarov <hippik80@gmail.com>
-RUN adduser -D developer
-WORKDIR /app
+FROM gcr.io/distroless/base
+
 COPY wal-listener .
-USER developer
 
 ENTRYPOINT ["./wal-listener"]

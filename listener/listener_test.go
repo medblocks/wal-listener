@@ -463,7 +463,7 @@ func TestListener_Stream(t *testing.T) {
 				)
 
 				setPublish(
-					"pre_public_users",
+					"public_users",
 					Event{
 						ID:        uuid.MustParse("00000000-0000-4000-8000-000000000000"),
 						Schema:    "public",
@@ -504,9 +504,7 @@ func TestListener_Stream(t *testing.T) {
 							Tables: map[string][]string{"users": {"insert"}},
 						},
 					},
-					Nats: config.NatsCfg{
-						TopicPrefix: "pre_",
-					},
+					Nats: config.NatsCfg{},
 				},
 				slotName:   "myslot",
 				restartLSN: 0,
@@ -539,9 +537,7 @@ func TestListener_Stream(t *testing.T) {
 							Tables: map[string][]string{"users": {"insert"}},
 						},
 					},
-					Nats: config.NatsCfg{
-						TopicPrefix: "pre_",
-					},
+					Nats: config.NatsCfg{},
 				},
 				slotName:   "myslot",
 				restartLSN: 0,
@@ -600,9 +596,7 @@ func TestListener_Stream(t *testing.T) {
 							Tables: map[string][]string{"users": {"insert"}},
 						},
 					},
-					Nats: config.NatsCfg{
-						TopicPrefix: "pre_",
-					},
+					Nats: config.NatsCfg{},
 				},
 				slotName:   "myslot",
 				restartLSN: 0,
@@ -672,9 +666,7 @@ func TestListener_Stream(t *testing.T) {
 							Tables: map[string][]string{"users": {"insert"}},
 						},
 					},
-					Nats: config.NatsCfg{
-						TopicPrefix: "pre_",
-					},
+					Nats: config.NatsCfg{},
 				},
 				slotName:   "myslot",
 				restartLSN: 0,
@@ -743,7 +735,7 @@ func TestListener_Stream(t *testing.T) {
 				)
 
 				setPublish(
-					"pre_public_users",
+					"public_users",
 					Event{
 						ID:        uuid.MustParse("00000000-0000-4000-8000-000000000000"),
 						Schema:    "public",
@@ -777,9 +769,7 @@ func TestListener_Stream(t *testing.T) {
 							Tables: map[string][]string{"users": {"insert"}},
 						},
 					},
-					Nats: config.NatsCfg{
-						TopicPrefix: "pre_",
-					},
+					Nats: config.NatsCfg{},
 				},
 				slotName:   "myslot",
 				restartLSN: 0,

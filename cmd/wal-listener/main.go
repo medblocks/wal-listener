@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/nats-io/stan.go"
+	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
@@ -14,14 +14,11 @@ import (
 	"github.com/ihippik/wal-listener/listener"
 )
 
-// go build -ldflags "-X main.version=1.0.1" main.go
-var version = "0.1.0"
-
 func main() {
 	app := &cli.App{
 		Name:    "Wal-Listener",
 		Usage:   "listen postgres events",
-		Version: version,
+		Version: config.Version,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "config",
@@ -41,7 +38,7 @@ func main() {
 
 			initLogger(cfg.Logger)
 
-			sc, err := stan.Connect(cfg.Nats.ClusterID, cfg.Nats.ClientID, stan.NatsURL(cfg.Nats.Address))
+			sc, err := nats.Connect(cfg.Nats.Address, nats.Name(cfg.Nats.ClientID))
 			if err != nil {
 				logrus.WithError(err).Fatalln(listener.ErrNatsConnection)
 			}

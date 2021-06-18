@@ -2,22 +2,25 @@ package listener
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nats-io/stan.go"
+	nats "github.com/nats-io/nats.go"
+	"github.com/sirupsen/logrus"
 )
 
 //go:generate  easyjson nats_publisher.go
 
 // NatsPublisher represent event publisher.
 type NatsPublisher struct {
-	conn stan.Conn
+	conn *nats.Conn
 }
 
 // Close NATS connection.
 func (n NatsPublisher) Close() error {
-	return n.conn.Close()
+	n.conn.Close()
+	return nil
 }
 
 // Event event structure for publishing to the NATS server.
@@ -41,11 +44,25 @@ func (n NatsPublisher) Publish(subject string, event Event) error {
 }
 
 // NewNatsPublisher return new NatsPublisher instance.
-func NewNatsPublisher(conn stan.Conn) *NatsPublisher {
+func NewNatsPublisher(conn *nats.Conn) *NatsPublisher {
 	return &NatsPublisher{conn: conn}
 }
 
 // GetSubjectName creates subject name from the prefix, schema and table name.
-func (e Event) GetSubjectName(prefix string) string {
-	return fmt.Sprintf("%s%s_%s", prefix, e.Schema, e.Table)
+func (e Event) GetSubjectName(format string) string {
+	if format == "" {
+		return fmt.Sprintf("%s_%s", e.Schema, e.Table)
+	}
+
+	switch strings.Count(format, "%s") {
+	case 0:
+		return format
+	case 1:
+		return fmt.Sprintf(format, e.Table)
+	case 2:
+		return fmt.Sprintf(format, e.Schema, e.Table)
+	default:
+		logrus.Warnf("nats subject format contains too many placeholders: %q", format)
+		return fmt.Sprintf("%s_%s", e.Schema, e.Table)
+	}
 }
