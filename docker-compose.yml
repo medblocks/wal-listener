@@ -1,0 +1,9 @@
+version: "3"
+services: 
+  wal:
+    image: medblocks/wal-listner
+    command: sh -c "/wait && sleep 5 && /wal-listner -c /app/config.yml"
+    volumes: 
+        - ./cmd/wal-listener/wal-listner-config.yml:/app/config.yml
+    environment: 
+        WAIT_HOSTS: db:5432

@@ -7,7 +7,6 @@ import (
 
 	"github.com/google/uuid"
 	nats "github.com/nats-io/nats.go"
-	"github.com/sirupsen/logrus"
 )
 
 //go:generate  easyjson nats_publisher.go
@@ -49,20 +48,10 @@ func NewNatsPublisher(conn *nats.Conn) *NatsPublisher {
 }
 
 // GetSubjectName creates subject name from the prefix, schema and table name.
-func (e Event) GetSubjectName(format string) string {
-	if format == "" {
-		return fmt.Sprintf("%s_%s", e.Schema, e.Table)
-	}
-
-	switch strings.Count(format, "%s") {
-	case 0:
-		return format
-	case 1:
-		return fmt.Sprintf(format, e.Table)
-	case 2:
-		return fmt.Sprintf(format, e.Schema, e.Table)
-	default:
-		logrus.Warnf("nats subject format contains too many placeholders: %q", format)
-		return fmt.Sprintf("%s_%s", e.Schema, e.Table)
+func (e Event) GetSubjectName(prefix string) string {
+	if prefix == "" {
+		return fmt.Sprintf("wal.%s.%s", e.Schema, e.Table)
+	} else {
+		return fmt.Sprintf("%s.%s.%s", prefix, e.Table, strings.ToLower(e.Action))
 	}
 }
